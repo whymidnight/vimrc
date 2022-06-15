@@ -2,6 +2,8 @@ noremap <silent> <leader>om :call OpenMarkdownPreview()<cr>
 autocmd BufWritePre *.go :silent call CocAction('runCommand', 'editor.action.organizeImport')
 
 cnoreabbrev crs CocRestart
+cnoreabbrev <expr> asdf getcmdtype() == ":" && getcmdline() == 'asdf' ? ':w <BAR> :CocRestart' : 'asdf'
+
 
 set noeol
 

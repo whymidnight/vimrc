@@ -1,6 +1,8 @@
 noremap <silent> <leader>om :call OpenMarkdownPreview()<cr>
 autocmd BufWritePre *.go :silent call CocAction('runCommand', 'editor.action.organizeImport')
 
+cnoreabbrev crs CocRestart
+
 set noeol
 
 let g:coc_node_path = '/opt/homebrew/bin/node'
@@ -85,8 +87,8 @@ set incsearch              " Jump to search match while typing.
 set ignorecase             " Searching with / is case-insensitive.
 set smartcase              " Disable 'ignorecase' if the term contains upper-case.
 set nrformats-=octal       " Remove octal support from 'nrformats'.
-set tabstop=4              " Size of a Tab character.
-set shiftwidth=4           " Use same value as 'tabstop'.
+set tabstop=2              " Size of a Tab character.
+set shiftwidth=2           " Use same value as 'tabstop'.
 set softtabstop=-1         " Use same value as 'shiftwidth'.
 
 " Persist undo history between Vim sessions.
@@ -150,6 +152,7 @@ Plug 'tpope/vim-eunuch'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'ahmadie/workspace.vim'
+Plug 'tomlion/vim-solidity'
 if !has('nvim')
     Plug 'roxma/vim-hug-neovim-rpc'
 endif

@@ -7,7 +7,8 @@ cnoreabbrev <expr> asdf getcmdtype() == ":" && getcmdline() == 'asdf' ? ':w <BAR
 
 set noeol
 
-let g:coc_node_path = '/opt/homebrew/bin/node'
+let g:coc_node_path = '/Users/ddigiacomo/.nvm/versions/node/v16.15.1/bin/node'
+" let g:node_host_prog = '/Users/ddigiacomo/.nvm/versions/node/v16.15.1/bin/node'
 
 function! OpenMarkdownPreview() abort
 if exists('s:markdown_job_id') && s:markdown_job_id > 0
@@ -151,10 +152,13 @@ Plug 'prabirshrestha/vim-lsp'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'arzg/vim-colors-xcode'
 Plug 'tpope/vim-eunuch'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
 Plug 'ahmadie/workspace.vim'
 Plug 'tomlion/vim-solidity'
+Plug 'rebelot/kanagawa.nvim'
+Plug 'nvim-lualine/lualine.nvim'
+Plug 'kyazdani42/nvim-web-devicons'
+Plug 'lukas-reineke/indent-blankline.nvim'
+Plug 'kdheepak/tabline.nvim'
 if !has('nvim')
     Plug 'roxma/vim-hug-neovim-rpc'
 endif
@@ -166,11 +170,86 @@ au User lsp_setup call lsp#register_server({
      \ 'cmd': {server_info->['php', expand('~/.vim/plugged/php-language-server/bin/php-language-server.php')]},
      \ 'whitelist': ['php'],                                                     
      \ })
-colorscheme cyberpunk-neon
-colorscheme xcodewwdc
-set termguicolors
+"colorscheme cyberpunk-neon
+"colorscheme xcodewwdc
+colorscheme kanagawa
+"set termguicolors
 
 " let g:workspace#vim#airline#enable = 1
-let g:airline#extensions#tabline#enabled = 1
+"let g:airline#extensions#tabline#enabled = 1
 " let g:airline#extensions#tabline#show_tabs = 0
 " let g:airline#extensions#tabline#show_tab_count = 0
+
+lua << END
+require('lualine').setup({
+  tabline = {
+    lualine_a = {},
+    lualine_b = {},
+    lualine_c = { require'tabline'.tabline_buffers },
+    lualine_x = { require'tabline'.tabline_tabs },
+    lualine_y = {},
+    lualine_z = {},
+  }
+})
+require('kanagawa').setup({
+    undercurl = true,           -- enable undercurls
+    commentStyle = { italic = true },
+    functionStyle = {},
+    keywordStyle = { italic = true},
+    statementStyle = { bold = true },
+    typeStyle = {},
+    variablebuiltinStyle = { italic = true},
+    specialReturn = true,       -- special highlight for the return keyword
+    specialException = true,    -- special highlight for exception handling keywords
+    transparent = false,        -- do not set background color
+    dimInactive = false,        -- dim inactive window `:h hl-NormalNC`
+    globalStatus = false,       -- adjust window separators highlight for laststatus=3
+    colors = {},
+    overrides = {},
+})
+
+vim.cmd [[highlight IndentBlanklineIndent1 guibg=#1f1f1f gui=nocombine]]
+vim.cmd [[highlight IndentBlanklineIndent2 guibg=#1a1a1a gui=nocombine]]
+
+vim.opt.list = true
+vim.opt.listchars:append("space:⋅")
+
+require("indent_blankline").setup {
+    -- for example, context is off by default, use this to turn it on
+    space_char_blankline = " ",
+    show_current_context = true,
+    show_current_context_start = true,
+    char = "",
+    char_highlight_list = {
+        "IndentBlanklineIndent1",
+        "IndentBlanklineIndent2",
+    },
+    space_char_highlight_list = {
+        "IndentBlanklineIndent1",
+        "IndentBlanklineIndent2",
+    },
+    show_trailing_blankline_indent = false,
+}
+
+vim.cmd [[
+  set guioptions-=e " Use showtabline in gui vim
+  set sessionoptions+=tabpages,globals " store tabpages and globals in session
+]]
+
+require("tabline").setup {
+  enable = true,
+  options = {
+  -- If lualine is installed tabline will use separators configured in lualine by default.
+  -- These options can be used to override those settings.
+    section_separators = {'', ''},
+    component_separators = {'', ''},
+    show_tabs_always = true, -- this shows tabs only when there are more than one tab or if the first tab is named
+    show_devicons = true, -- this shows devicons in buffer section
+    show_bufnr = true, -- this appends [bufnr] to buffer section,
+    show_filename_only = false, -- shows base filename only instead of relative path in filename
+    modified_icon = "+ ", -- change the default modified icon
+    modified_italic = true, -- set to true by default; this determines whether the filename turns italic if modified
+    show_tabs_only = true, -- this shows only tabs instead of tabs + buffers
+  }
+}
+END
